@@ -1,0 +1,2 @@
+# WeatherWatchFace
+My latest attempt to create an Android Wear watch face.  More complete than my first one because it interacts with the mobile to retrieve up-to-date weather data.  Battery level is displayed as circles at the top of the watch, watch battery on the left and mobile batter on the right.  weather icon, temp and weather condition are updated every 15 minutes.  I've never tried it on a round watch (I only own square) but it can probably be adjusted as needed.  It's not pretty, I know, but I was learning as I went.  Feel free to make it look better.
