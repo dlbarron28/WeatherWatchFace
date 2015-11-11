@@ -143,7 +143,7 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
             mSmallText.setTextSize(resources.getDimension(R.dimen.small_text));
             mSmallText.setTextAlign(Paint.Align.CENTER);
             blackPaint = new Paint();
-            blackPaint.setColor(Color.BLACK);
+            blackPaint.setColor(resources.getColor(R.color.analog_background));
             blackPaint.setAntiAlias(true);
 
             mTime = new Time();
@@ -208,7 +208,8 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
 
             int width = bounds.width();
             int height = bounds.height();
-
+            int arc_size=resources.getInteger(R.integer.arc_size);
+            int arc_start=resources.getInteger(R.integer.arc_start);
 
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), mBackgroundPaint);
 
@@ -226,13 +227,13 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
             float hrLength = centerX - 80;
             if (!mAmbient) {
                 canvas.drawBitmap(mScaledWeatherBitmap, (mScaledWeatherBitmap.getWidth()), (mScaledWeatherBitmap.getHeight() / 2), null);
-                canvas.drawText(temperature, centerX, centerY + 40, mTextPaint);
-                canvas.drawText(condition.toUpperCase(), centerX, centerY + 80, mTextPaint);
-                canvas.drawText(dateString, centerX, centerY + 120, mTextPaint);
-                canvas.drawArc(0, 0, 40, 40, 180, (float) (watchBatteryLevel * 1.8), true, mSecondHandPaint);
-                canvas.drawArc(0, 0, 40, 40, 180, ((float) (phoneBatteryLevel * 1.8) * -1), true, mHandPaint);
-                canvas.drawText(updateTime, centerX, 20, mSmallText);
-                canvas.drawCircle(20, 20, 13, blackPaint);
+                canvas.drawText(temperature, centerX, centerY + arc_size, mTextPaint);
+                canvas.drawText(condition.toUpperCase(), centerX, centerY + arc_size*2, mTextPaint);
+                canvas.drawText(dateString, centerX, centerY + arc_size*3, mTextPaint);
+                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, (float) (watchBatteryLevel * 1.8), true, mSecondHandPaint);
+                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, ((float) (phoneBatteryLevel * 1.8) * -1), true, mHandPaint);
+                canvas.drawText(updateTime, centerX, arc_size/20, mSmallText);
+                canvas.drawCircle(arc_size/2, arc_size/2, 13, blackPaint);
             }
             float minX = (float) Math.sin(minRot) * minLength;
             float minY = (float) -Math.cos(minRot) * minLength;
