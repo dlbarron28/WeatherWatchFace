@@ -247,7 +247,7 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
                     variablePaint.setColor(resources.getColor(R.color.low_battery));
                 }
                 canvas.drawArc(0, 0, arc_size, arc_size, arc_start, ((float) (phoneBatteryLevel * 1.8) * -1), true, variablePaint);
-                canvas.drawText(updateTime, centerX, arc_size / 20, mSmallText);
+                canvas.drawText(updateTime, centerX, arc_size/2, mSmallText);
                 variablePaint.setColor(resources.getColor(R.color.analog_background));
                 canvas.drawCircle(arc_size/2, arc_size/2, 15, variablePaint);
             }
