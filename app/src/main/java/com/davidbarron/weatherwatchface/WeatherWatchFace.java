@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -23,10 +22,8 @@ import android.os.Vibrator;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,7 +57,7 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
         Bitmap mScaledWeatherBitmap;
         Paint mBackgroundPaint;
         Paint mHandPaint;
-        Paint blackPaint;
+        Paint variablePaint;
         Paint mSecondHandPaint;
         Paint mTextPaint;
         Paint mSmallText;
@@ -142,9 +139,9 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
             mSmallText.setAntiAlias(true);
             mSmallText.setTextSize(resources.getDimension(R.dimen.small_text));
             mSmallText.setTextAlign(Paint.Align.CENTER);
-            blackPaint = new Paint();
-            blackPaint.setColor(resources.getColor(R.color.analog_background));
-            blackPaint.setAntiAlias(true);
+            variablePaint = new Paint();
+            variablePaint.setColor(resources.getColor(R.color.analog_background));
+            variablePaint.setAntiAlias(true);
 
             mTime = new Time();
             AlarmManager alarmManager = (AlarmManager) WeatherWatchFace.this.getSystemService(Context.ALARM_SERVICE);
@@ -183,7 +180,7 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
                     mSecondHandPaint.setAntiAlias(!inAmbientMode);
                     mTextPaint.setAntiAlias(!inAmbientMode);
                     mSmallText.setAntiAlias(!inAmbientMode);
-                    blackPaint.setAntiAlias(!inAmbientMode);
+                    variablePaint.setAntiAlias(!inAmbientMode);
                 }
                 invalidate();
             }
@@ -229,11 +226,30 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
                 canvas.drawBitmap(mScaledWeatherBitmap, (mScaledWeatherBitmap.getWidth()), (mScaledWeatherBitmap.getHeight() / 2), null);
                 canvas.drawText(temperature, centerX, centerY + arc_size, mTextPaint);
                 canvas.drawText(condition.toUpperCase(), centerX, centerY + arc_size*2, mTextPaint);
-                canvas.drawText(dateString, centerX, centerY + arc_size*3, mTextPaint);
-                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, (float) (watchBatteryLevel * 1.8), true, mSecondHandPaint);
-                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, ((float) (phoneBatteryLevel * 1.8) * -1), true, mHandPaint);
-                canvas.drawText(updateTime, centerX, arc_size/20, mSmallText);
-                canvas.drawCircle(arc_size/2, arc_size/2, 13, blackPaint);
+                canvas.drawText(dateString, centerX, centerY + arc_size * 3, mTextPaint);
+                if(watchBatteryLevel > 75) {
+                    variablePaint.setColor(resources.getColor(R.color.high_battery));
+                }
+                else if(watchBatteryLevel > 25 && watchBatteryLevel < 75) {
+                    variablePaint.setColor(resources.getColor(R.color.mid_battery));
+                }
+                else if(watchBatteryLevel < 25) {
+                    variablePaint.setColor(resources.getColor(R.color.low_battery));
+                }
+                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, (float) (watchBatteryLevel * 1.8), true, variablePaint);
+                if(phoneBatteryLevel > 75) {
+                    variablePaint.setColor(resources.getColor(R.color.high_battery));
+                }
+                else if(phoneBatteryLevel > 25 && phoneBatteryLevel < 75) {
+                    variablePaint.setColor(resources.getColor(R.color.mid_battery));
+                }
+                else if(phoneBatteryLevel < 25) {
+                    variablePaint.setColor(resources.getColor(R.color.low_battery));
+                }
+                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, ((float) (phoneBatteryLevel * 1.8) * -1), true, variablePaint);
+                canvas.drawText(updateTime, centerX, arc_size / 20, mSmallText);
+                variablePaint.setColor(resources.getColor(R.color.analog_background));
+                canvas.drawCircle(arc_size/2, arc_size/2, 15, variablePaint);
             }
             float minX = (float) Math.sin(minRot) * minLength;
             float minY = (float) -Math.cos(minRot) * minLength;
