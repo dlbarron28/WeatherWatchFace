@@ -227,26 +227,32 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
                 canvas.drawText(temperature, centerX, centerY + arc_size, mTextPaint);
                 canvas.drawText(condition.toUpperCase(), centerX, centerY + arc_size*2, mTextPaint);
                 canvas.drawText(dateString, centerX, centerY + arc_size * 3, mTextPaint);
-                if(watchBatteryLevel > 75) {
-                    variablePaint.setColor(resources.getColor(R.color.high_battery));
+                if(watchBatteryLevel >= 75) {
+                    variablePaint.setColor(resources.getColor(R.color.blue));
                 }
-                else if(watchBatteryLevel > 25 && watchBatteryLevel < 75) {
-                    variablePaint.setColor(resources.getColor(R.color.mid_battery));
+                else if(watchBatteryLevel >= 50 && watchBatteryLevel < 75) {
+                    variablePaint.setColor(resources.getColor(R.color.green));
+                }
+                else if(watchBatteryLevel >= 25 && watchBatteryLevel < 50) {
+                    variablePaint.setColor(resources.getColor(R.color.yellow));
                 }
                 else if(watchBatteryLevel < 25) {
-                    variablePaint.setColor(resources.getColor(R.color.low_battery));
+                    variablePaint.setColor(resources.getColor(R.color.red));
                 }
                 canvas.drawArc(0, 0, arc_size, arc_size, arc_start, (float) (watchBatteryLevel * 1.8), true, variablePaint);
-                if(phoneBatteryLevel > 75) {
-                    variablePaint.setColor(resources.getColor(R.color.high_battery));
+                if(phoneBatteryLevel >= 75) {
+                    variablePaint.setColor(resources.getColor(R.color.blue));
                 }
-                else if(phoneBatteryLevel > 25 && phoneBatteryLevel < 75) {
-                    variablePaint.setColor(resources.getColor(R.color.mid_battery));
+                else if(phoneBatteryLevel >= 50 && phoneBatteryLevel < 75) {
+                    variablePaint.setColor(resources.getColor(R.color.green));
+                }
+                else if(phoneBatteryLevel >= 25 && phoneBatteryLevel < 50) {
+                    variablePaint.setColor(resources.getColor(R.color.yellow));
                 }
                 else if(phoneBatteryLevel < 25) {
-                    variablePaint.setColor(resources.getColor(R.color.low_battery));
+                    variablePaint.setColor(resources.getColor(R.color.red));
                 }
-                canvas.drawArc(0, 0, arc_size, arc_size, arc_start, ((float) (phoneBatteryLevel * 1.8) * -1), true, variablePaint);
+               canvas.drawArc(0, 0, arc_size, arc_size, arc_start, ((float) (phoneBatteryLevel * 1.8) * -1), true, variablePaint);
                 canvas.drawText(updateTime, centerX, arc_size/2, mSmallText);
                 variablePaint.setColor(resources.getColor(R.color.analog_background));
                 canvas.drawCircle(arc_size/2, arc_size/2, 15, variablePaint);
