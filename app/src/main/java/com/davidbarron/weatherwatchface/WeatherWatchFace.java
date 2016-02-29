@@ -151,7 +151,12 @@ public class WeatherWatchFace extends CanvasWatchFaceService {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, 0, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
 
         }
-
+        @Override
+        public void onTapCommand(int taptype, int x, int y, long eventTime) {
+            Intent intent = new Intent(WeatherWatchFace.this,WeatherWatchFaceAlarmReceiver.class);
+            sendBroadcast(intent);
+            updateTime="Updating...";
+        }
         @Override
         public void onDestroy() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
